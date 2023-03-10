@@ -25,7 +25,7 @@ pub struct Transcript {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "UPPERCASE")]
 pub enum TranscriptRole {
     // Human role
     Human,
