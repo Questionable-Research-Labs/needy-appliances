@@ -6,7 +6,7 @@
         transcript,
         TranscriptRole,
     } from "$lib/app";
-    import { afterUpdate } from "svelte";
+    import { afterUpdate, onMount } from "svelte";
 
     let entries: HTMLDivElement | undefined;
 
@@ -27,7 +27,7 @@
 <div class="layout">
     <div class="left">
         <img class="icon" src="/microwave.png" alt="" />
-        <h1>Emotionally Needy Devices</h1>
+        <h1>Emotionally Needy Appliances</h1>
         <p>Now your appliances can be as needy as your S/O</p>
         <div>
             {#if $action == Action.On}
@@ -61,6 +61,9 @@
 
     .hash {
         color: #999;
+        max-width: 300px;
+        overflow: auto;
+        white-space: pre-wrap;
     }
 
     .action {
@@ -71,6 +74,7 @@
         font-weight: bold;
         text-transform: uppercase;
         border: 1px solid #ececec;
+        margin-top: 1rem;
     }
 
     .action--on {
@@ -83,17 +87,22 @@
         border: 4px solid #666;
     }
 
+    h1 {
+        margin-bottom: 1rem;
+    }
+
     .left {
         display: flex;
         flex-flow: column;
-        gap: 1rem;
+
         align-items: center;
+        max-width: 400px;
+        text-align: center;
     }
 
     .layout {
         display: flex;
         flex-flow: row;
-        gap: 1rem;
 
         height: 100%;
         align-items: center;
@@ -105,7 +114,7 @@
         height: 100%;
         display: flex;
         flex-flow: column;
-        gap: 1rem;
+
         flex: auto;
         max-width: 800px;
         max-height: 700px;
@@ -114,6 +123,7 @@
         padding: 1.5rem;
         border: 1px solid #ececec;
         border-radius: 12px;
+        margin-left: 1rem;
     }
 
     .entries::-webkit-scrollbar {
@@ -153,6 +163,7 @@
         font-size: 1.25rem;
         border-radius: 12px;
         max-width: 70%;
+        margin-bottom: 1rem;
     }
 
     .entry--human {
