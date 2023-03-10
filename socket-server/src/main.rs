@@ -1,12 +1,14 @@
 use actix::{Actor, Handler, MessageResult, StreamHandler};
 use actix_web::{
+    http::header::CONTENT_TYPE,
     middleware::Logger,
-    web::{self, Data},
-    App, Error, HttpRequest, HttpResponse, HttpServer,
+    web::{self, Data, Path},
+    App, Error, HttpRequest, HttpResponse, HttpServer, Responder,
 };
 use actix_web_actors::ws::{self, WsResponseBuilder};
 use env_logger::Env;
 use mqtt::{init_mqtt, MQTTMessage};
+use rust_embed::{EmbeddedFile, RustEmbed};
 use std::net::Ipv4Addr;
 use tokio::sync::broadcast;
 
@@ -61,6 +63,60 @@ async fn ws(
     Ok(resp)
 }
 
+#[derive(RustEmbed)]
+#[folder = "src/public"]
+struct Public;
+
+/// Function for serving content from the embedded public
+/// content. Directory structure matches the paths vistied
+/// in this url.
+///
+/// `path` The path of the content to serve
+async fn content(path: Path<String>) -> impl Responder {
+    let path = path.into_inner();
+    if let Some(file) = Public::get(&path) {
+        use std::path::Path as StdPath;
+
+        let path = StdPath::new(&path);
+        let ext = match path.extension() {
+            Some(ext) => ext.to_str(),
+            None => None,
+        };
+
+        serve_file(ext, file)
+    } else {
+        let index = Public::get("index.html").expect("Missing index file");
+        serve_file(Some("html"), index)
+    }
+}
+
+async fn serve_index() -> impl Responder {
+    let index = Public::get("index.html").expect("Missing index file");
+    serve_file(Some("html"), index)
+}
+
+fn serve_file(ext: Option<&str>, file: EmbeddedFile) -> impl Responder {
+    // Required file extension content types
+
+    let ext = match ext {
+        Some(value) => match value {
+            "html" => "text/html",
+            "js" | "mjs" => "text/javascript",
+            "json" => "application/json",
+            "woff" => "font/woff",
+            "woff2" => "font/woff2",
+            "webp" => "image/webp",
+            "css" => "text/css",
+            _ => "text/plain",
+        },
+        None => "text/plain",
+    };
+
+    HttpResponse::Ok()
+        .append_header((CONTENT_TYPE, ext))
+        .body(file.data)
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(Env::default().default_filter_or("debug"));
@@ -79,8 +135,9 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(Logger::default())
             .app_data(rx)
-            .route("/", web::get().to(HttpResponse::Ok))
             .route("/ws", web::get().to(ws))
+            .route("/{filename:.*}", web::get().to(content))
+            .default_service(web::get().to(serve_index))
     })
     .bind((Ipv4Addr::UNSPECIFIED, 80))?
     .run()
