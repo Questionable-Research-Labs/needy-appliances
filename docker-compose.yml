@@ -1,0 +1,12 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    volumes:
+      - ./mqtt/config/:/mosquitto/config/:rwx
+      - data:/mosquitto/data/
+    ports:
+      - 1883:1883
+      - 9001:9001
+
+volumes:
+  data: ~
