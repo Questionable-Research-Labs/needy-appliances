@@ -50,6 +50,8 @@ async fn ws(
     let mut rx = rx.resubscribe();
     let (addr, resp) = WsResponseBuilder::new(SocketActor {}, &req, stream).start_with_addr()?;
 
+    println!("POST CON");
+
     tokio::spawn(async move {
         while let Ok(value) = rx.recv().await {
             let _ = addr.send(value).await;
