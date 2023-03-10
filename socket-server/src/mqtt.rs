@@ -37,19 +37,17 @@ pub enum TranscriptRole {
 pub enum Action {
     Off,
     On,
-    Unknown(u8),
 }
 
-impl From<u8> for Action {
-    fn from(value: u8) -> Self {
-        match value {
+impl Action {
+    fn from(value: u8) -> Option<Self> {
+        Some(match value {
             0 => Action::Off,
             1 => Action::On,
-            value => Action::Unknown(value),
-        }
+            _ => return None,
+        })
     }
 }
-
 const TARGET_URL: &str = "mqtt://localhost:1883/";
 const TOPIC_ACTION: &str = "ACTION";
 const TOPIC_FACE_HASH: &str = "FACE_HASH";
@@ -109,6 +107,7 @@ pub async fn init_mqtt(tx: broadcast::Sender<MQTTMessage>) {
 enum ParseError {
     UnexpectedTopic,
     MissingAction,
+    UnknownAction,
     InvalidHashJson,
 }
 
@@ -117,7 +116,7 @@ fn try_parse_payload(topic: &str, payload: &[u8]) -> Result<MQTTMessage, ParseEr
         TOPIC_ACTION => {
             dbg!(payload);
             let value = *payload.first().ok_or(ParseError::MissingAction)?;
-            let action = Action::from(value);
+            let action = Action::from(value).ok_or(ParseError::UnknownAction)?;
             Ok(MQTTMessage::Action { action })
         }
         TOPIC_FACE_HASH => {
