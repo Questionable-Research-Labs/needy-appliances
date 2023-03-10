@@ -1,0 +1,5 @@
+[workspace]
+members = [
+	"face-detection",
+	"socket-server"
+]
