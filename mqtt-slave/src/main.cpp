@@ -2,6 +2,8 @@
 #include <PubSubClient.h>
 #include <WiFiManager.h>  //https://github.com/tzapu/WiFiManager
 
+#include <action.h>
+
 WiFiClient wifiClient;
 
 
@@ -16,11 +18,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
     // Switch on the LED if an 1 was received as first character
     if ((char)payload[0] == '1') {
-		digitalWrite(BUILTIN_LED, LOW);	 // Turn the LED on (Note that LOW is the voltage level
 						// but actually the LED is on; this is because
 						// it is active low on the ESP-01)
+            startAction();
     } else {
-		digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
+        stopAction();
     }
 }
 
@@ -56,7 +58,6 @@ void reconnect() {
 }
 
 void setup() {
-	pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
     Serial.begin(115200);
     Serial.println("MQTT Slave Booting");
     Serial.println("Starting WiFiManager");
