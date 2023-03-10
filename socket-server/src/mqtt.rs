@@ -8,7 +8,7 @@ use tokio::sync::broadcast;
 #[rtype(result = "()")]
 #[serde(tag = "type")]
 pub enum MQTTMessage {
-    Action(Action),
+    Action { action: Action },
     FaceHash(FaceHash),
     Transcript(Transcript),
 }
@@ -50,7 +50,7 @@ impl From<u8> for Action {
     }
 }
 
-const TARGET_URL: &str = "mqtt://0.0.0.0:1883/";
+const TARGET_URL: &str = "mqtt://localhost:1883/";
 const TOPIC_ACTION: &str = "ACTION";
 const TOPIC_FACE_HASH: &str = "FACE_HASH";
 const TOPIC_TRANS: &str = "TRANS";
@@ -89,14 +89,23 @@ pub async fn init_mqtt(tx: broadcast::Sender<MQTTMessage>) {
     while let Ok(result) = client.read_subscriptions().await {
         let topic = result.topic();
         let payload = result.payload();
-        if let Ok(message) = try_parse_payload(topic, payload) {
-            if tx.send(message).is_err() {
-                eprintln!("Failed to send message to sender")
+        let message = match try_parse_payload(topic, payload) {
+            Ok(message) => message,
+            Err(err) => {
+                eprintln!("{:?}", err);
+                continue;
             }
+        };
+
+        println!("Message: {:?}", message);
+
+        if tx.send(message).is_err() {
+            eprintln!("Failed to send message to sender")
         }
     }
 }
 
+#[derive(Debug)]
 enum ParseError {
     UnexpectedTopic,
     MissingAction,
@@ -106,9 +115,10 @@ enum ParseError {
 fn try_parse_payload(topic: &str, payload: &[u8]) -> Result<MQTTMessage, ParseError> {
     match topic {
         TOPIC_ACTION => {
+            dbg!(payload);
             let value = *payload.first().ok_or(ParseError::MissingAction)?;
             let action = Action::from(value);
-            Ok(MQTTMessage::Action(action))
+            Ok(MQTTMessage::Action { action })
         }
         TOPIC_FACE_HASH => {
             let value: FaceHash =
