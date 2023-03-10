@@ -1,9 +1,11 @@
 use actix::{Actor, Handler, MessageResult, StreamHandler};
 use actix_web::{
+    middleware::Logger,
     web::{self, Data},
     App, Error, HttpRequest, HttpResponse, HttpServer,
 };
 use actix_web_actors::ws::{self, WsResponseBuilder};
+use env_logger::Env;
 use mqtt::{init_mqtt, MQTTMessage};
 use std::net::Ipv4Addr;
 use tokio::sync::broadcast;
@@ -21,6 +23,8 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for SocketActor {
     fn handle(&mut self, msg: Result<ws::Message, ws::ProtocolError>, ctx: &mut Self::Context) {
         match msg {
             Ok(ws::Message::Ping(msg)) => ctx.pong(&msg),
+            Ok(ws::Message::Text(msg)) => ctx.text(msg),
+            Ok(ws::Message::Binary(msg)) => ctx.binary(msg),
             _ => (),
         }
     }
@@ -57,6 +61,8 @@ async fn ws(
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    env_logger::init_from_env(Env::default().default_filter_or("debug"));
+
     let (tx, rx) = broadcast::channel(12);
 
     tokio::spawn(init_mqtt(tx));
@@ -69,6 +75,7 @@ async fn main() -> std::io::Result<()> {
         let rx = rx.clone();
 
         App::new()
+            .wrap(Logger::default())
             .app_data(rx)
             .route("/", web::get().to(HttpResponse::Ok))
             .route("/ws", web::get().to(ws))
