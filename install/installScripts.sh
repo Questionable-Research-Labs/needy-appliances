@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt update && sudo apt install dialog gettext-base moreutils git
+sudo apt update && sudo apt install dialog gettext-base moreutils git build-essential
 
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 
