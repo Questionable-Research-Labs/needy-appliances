@@ -19,6 +19,10 @@ else:
 
 know_faces = []
 
+past = []
+
+client.publish(config.mqtt_topic, '{"ids":[]}')
+
 while rval:
     rval, frame = vc.read()
 
@@ -27,7 +31,9 @@ while rval:
         break
     faces = batch_frames(know_faces, vc)
 
-    client.publish(config.mqtt_topic, '{"ids":[%s]}' % ','.join([
-                   '"%d"' % x for x in faces]))
+    if faces != past:
+        client.publish(config.mqtt_topic, '{"ids":[%s]}' % ','.join([
+            '"%d"' % x for x in faces]))
+        past = faces
 
 vc.release()
