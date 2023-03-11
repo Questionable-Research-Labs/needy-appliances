@@ -1,9 +1,11 @@
 #!/bin/bash
 
+sudo apt update && sudo apt install prompt envsubset sponge git
+
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 
-sudo apt update && sudo apt upgrade -y
-sudo apt install prompt envsubset sponge
+echo "Root: $PROJECT_ROOT"
+
 
 for file in ./scripts/*.sh; do
     dialog --title "Run $file" \
@@ -16,7 +18,7 @@ for file in ./scripts/*.sh; do
     # 255 means user hit [Esc] key.
     response=$?
     case $response in
-    0) $file && read -p "Press enter to continue";;
+    0) PROJECT_ROOT=$PROJECT_ROOT $file && read -p "(Failed) Press enter to continue"  || read -p "(Falied) Press enter to continue";;
     1) echo "Skipping";;
     255) echo "[ESC] key pressed." && break;;
     esac
