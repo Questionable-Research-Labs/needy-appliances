@@ -17,7 +17,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println();
 
     // Switch on the LED if an 1 was received as first character
-    if ((char)payload[0] == '1') {
+    if (payload[0] == 1) {
 						// but actually the LED is on; this is because
 						// it is active low on the ESP-01)
             startAction();
@@ -26,7 +26,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
 }
 
-IPAddress mqttServer = IPAddress(10, 42, 0, 1);
+IPAddress mqttServer = IPAddress(192, 168, 1, 5);
 PubSubClient client(mqttServer, 1883, callback, wifiClient);
 
 unsigned long lastMsg = 0;
@@ -61,12 +61,13 @@ void setup() {
     Serial.begin(115200);
     Serial.println("MQTT Slave Booting");
     Serial.println("Starting WiFiManager");
+    setupAction();
+
     // WiFiManager
     // Local intialization. Once its business is done, there is no need to keep it around
     WiFiManager wifiManager;
 
     // reset saved settings
-    // wifiManager.resetSettings();
     wifiManager.setConnectRetries(6);
     wifiManager.setDarkMode(true);
     wifiManager.setCountry("NZ");
