@@ -3,12 +3,17 @@
 # plug: https://github.com/invalidse
 
 import speech_recognition as sr
+from os import environ
+
 threshold = 0
 
 def listen():
     global threshold
+
+    # enumerate(sr.Microphone.list_microphone_names()).find
+
     r = sr.Recognizer()
-    with sr.Microphone() as source:
+    with sr.Microphone(device_index=environ.get("ALSA_INDEX")) as source:
         
         if(threshold == 0):
             print("[CALIBRATING MICROPHONE...]")
