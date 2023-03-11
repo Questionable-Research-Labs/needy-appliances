@@ -9,7 +9,8 @@ def listen():
     r = sr.Recognizer()
     with sr.Microphone() as source:
 
-        r.energy_threshold = 3000
+        r.energy_threshold = 5000
+        r.ma
         # print("[ADJUSTING FOR AMBIENT NOISE...]")
         # r.adjust_for_ambient_noise(source, duration=3)
         # print("[SET MINIMUM ENERGY THRESHOLD TO {}]".format(r.energy_threshold))
