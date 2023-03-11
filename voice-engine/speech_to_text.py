@@ -16,7 +16,7 @@ def listen():
         print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
 
 
-    if environ.get("ALSA_INDEX") && environ.get("ALSA_INDEX").isnumeric():
+    if environ.get("ALSA_INDEX") and environ.get("ALSA_INDEX").isnumeric():
         device_index = int(environ.get("ALSA_INDEX"))
 
     print(device_index)
