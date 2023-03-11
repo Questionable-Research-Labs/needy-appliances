@@ -19,6 +19,8 @@ def listen():
     if environ.get("ALSA_INDEX") && environ.get("ALSA_INDEX").isnumeric():
         device_index = int(environ.get("ALSA_INDEX"))
 
+    print(device_index)
+
     r = sr.Recognizer()
     with sr.Microphone(device_index=device_index) as source:
         
