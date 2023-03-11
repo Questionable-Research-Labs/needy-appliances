@@ -29,11 +29,21 @@ while rval:
     key = cv2.waitKey(20)
     if key == 27:  # exit on ESC
         break
+
     faces = batch_frames(know_faces, vc)
 
     if faces != past:
-        client.publish(config.mqtt_topic, '{"ids":[%s]}' % ','.join([
-            '"%d"' % x for x in faces]))
-        past = faces
+
+        if config.mqtt_topic == "HASH_FACE":
+            client.publish(config.mqtt_topic, '{"ids":[%s]}' % ','.join([
+                '"%d"' % x for x in faces]))
+            past = faces
+
+        else:
+            if len(faces) == 0:
+                client.publish(config.mqtt_topic, bytearray([1]))
+            else:
+                client.publish(config.mqtt_topic, bytearray([0]))
+
 
 vc.release()

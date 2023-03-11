@@ -18,7 +18,7 @@ $ python -m pip install -r requirements.txt
 
 ## Configuration
 
-The mqtt broker and port can be set with the environment variables `MQTT_BROKER` and `MQTT_PORT`. The topic is hardcoded to `FACE_HASH`, and the device id is `FACE_DETECTOR`.
+The mqtt broker and port can be set with the environment variables `MQTT_BROKER` and `MQTT_PORT`. The topic can be set with the envvar `MQTT_TOPIC`, and can either be `ACTION` so that a watched pot never boils or `FACE_HASH` for face detection
 
 To run the project use:
 
