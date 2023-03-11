@@ -15,19 +15,17 @@ except:
     print("MQTT NOT CONNECTED, PLEASE CHECK CONNECTION")
 
 def process(script):
+    client.publish("TRANS", json.dumps(script[-1]))
+    print("[MQTT] Published: "+ str(json.dumps(script[-1])))
 
-    if("--start" in script[-1]["content"]):
+def toggle_appliance(value):
+    if(value):
         client.publish("ACTION", bytearray([1]))
-    elif("--stop" in script[-1]["content"]):
+    else:
         client.publish("ACTION", bytearray([0]))
 
-    # send last 2 messages to the display, in json format
-    client.publish("TRANS", json.dumps(script[-2]))
-    client.publish("TRANS", json.dumps(script[-1]))
-    
+    print("[MQTT] Published: "+ str(value))
 
-    print(json.dumps(script[-2]))
-    print(json.dumps(script[-1]))
 
     
 if __name__ == "__main__":

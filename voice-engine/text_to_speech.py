@@ -8,8 +8,8 @@ import os
 # Setup the engine
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
-for voice in voices:
-    print(voice.id)
+# for voice in voices:
+#     print(voice.id)
 
 engine.setProperty('voice', 'C:/Users/taine/Downloads/en-US')
 engine.setProperty('rate', 175)
@@ -17,6 +17,7 @@ engine.setProperty('rate', 175)
 def process(script):
     engine.say(script[-1]["content"])
     engine.runAndWait()
+    return True
 
 if __name__ == "__main__":
     script = []

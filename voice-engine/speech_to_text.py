@@ -3,15 +3,18 @@
 # plug: https://github.com/invalidse
 
 import speech_recognition as sr
+threshold = 0
 
 def listen():
-
+    global threshold
     r = sr.Recognizer()
     with sr.Microphone() as source:
         
-        print("[CALIBRATING MICROPHONE...]")
-        r.adjust_for_ambient_noise(source, duration=1)
-        print("[MIN ENERGY THRESHOLD: {}]".format(r.energy_threshold))
+        if(threshold == 0):
+            print("[CALIBRATING MICROPHONE...]")
+            r.adjust_for_ambient_noise(source, duration=5)
+            print("[MIN ENERGY THRESHOLD: {}]".format(r.energy_threshold))
+            threshold = r.energy_threshold
 
         # stop listening quickly if the user stops talking
         r.pause_threshold = 0.4
@@ -23,7 +26,7 @@ def listen():
         # print("[SET MINIMUM ENERGY THRESHOLD TO {}]".format(r.energy_threshold))
 
         print("[LISTENING...]")
-        audio = r.listen(source)
+        audio = r.listen(source, timeout=15, phrase_time_limit=5)
         try:
             print("[RECOGNIZING...]")
             text = r.recognize_google(audio)
