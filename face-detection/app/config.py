@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from os import environ
+from paho.mqtt import client as mqtt_client
 
 
 @dataclass
@@ -20,9 +21,11 @@ class EnvVars():
         if not self.mqtt_broker:
             assert self.mqtt_broker is not None, "Please set the environment variable MQTT_BROKER"
 
-        self.mqtt_port = environ.get("MQTT_PORT")
+        self.mqtt_port = int(environ.get("MQTT_PORT"))
         if not self.mqtt_port:
             assert self.mqtt_broker is not None, "Please set the environment variable MQTT_PORT"
 
     def get_client(self):
-        passexit
+        client = mqtt_client.Client(self.mqtt_client_id)
+        client.connect(self.mqtt_broker, self.mqtt_port)
+        return client
