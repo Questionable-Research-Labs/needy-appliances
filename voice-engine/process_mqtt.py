@@ -8,9 +8,14 @@ import json
 
 broker_address = "192.168.137.1"
 client = mqtt.Client("P1")
-client.connect(broker_address)
+
+try:
+    client.connect(broker_address)
+except:
+    print("MQTT NOT CONNECTED, PLEASE CHECK CONNECTION")
 
 def process(script):
+
     if("--start" in script[-1]["content"]):
         client.publish("ACTION", bytearray([1]))
     elif("--stop" in script[-1]["content"]):

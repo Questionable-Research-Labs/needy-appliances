@@ -8,9 +8,16 @@ def listen():
 
     r = sr.Recognizer()
     with sr.Microphone() as source:
+        
+        print("[CALIBRATING MICROPHONE...]")
+        r.adjust_for_ambient_noise(source, duration=1)
+        print("[MIN ENERGY THRESHOLD: {}]".format(r.energy_threshold))
 
-        r.energy_threshold = 5000
-        r.ma
+        # stop listening quickly if the user stops talking
+        r.pause_threshold = 0.4
+        r.non_speaking_duration = 0.4
+
+
         # print("[ADJUSTING FOR AMBIENT NOISE...]")
         # r.adjust_for_ambient_noise(source, duration=3)
         # print("[SET MINIMUM ENERGY THRESHOLD TO {}]".format(r.energy_threshold))
