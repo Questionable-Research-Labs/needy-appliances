@@ -3,6 +3,7 @@
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 
 sudo apt update && sudo apt upgrade -y
+sudo apt install prompt envsubset sponge
 
 for file in ./scripts/*.sh; do
     dialog --title "Run $file" \
@@ -15,7 +16,7 @@ for file in ./scripts/*.sh; do
     # 255 means user hit [Esc] key.
     response=$?
     case $response in
-    0) $file;;
+    0) $file && read -p "Press enter to continue";;
     1) echo "Skipping";;
     255) echo "[ESC] key pressed." && break;;
     esac
