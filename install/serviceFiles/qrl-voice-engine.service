@@ -4,6 +4,8 @@ After=mosquitto.service
 
 [Service]
 ExecStart=${PROJECT_ROOT}/voice-engine/run.sh
+WorkingDirectory=${PROJECT_ROOT}/voice-engine
+
 Type=simple
 
 [Install]

@@ -4,6 +4,7 @@
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 cd $PROJECT_ROOT/socket-server
 cargo build --release
+source "$HOME/.cargo/env"
 cd -
 
 # Copy build into /usr/bin
