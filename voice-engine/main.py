@@ -20,3 +20,9 @@ def main():
             response = process_ai.process(script)
             script.append({"role": "assistant", "content": response.choices[0].message.content})
             print("[MICROWAVE] {}".format(response.choices[0].message.content))
+
+            # text_to_speech.say(response.choices[0].message.content)
+
+if __name__ == "__main__":
+    main()
+    
