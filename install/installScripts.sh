@@ -1,10 +1,11 @@
 #!/bin/bash
 
-sudo apt update && sudo apt install prompt envsubset sponge git
+sudo apt update && sudo apt install dialog gettext-base moreutils git
 
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 
-echo "Root: $PROJECT_ROOT"
+
+read -p "Root: $PROJECT_ROOT [ready to starr?]"
 
 
 for file in ./scripts/*.sh; do
