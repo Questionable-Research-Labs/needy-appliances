@@ -13,7 +13,7 @@ def listen():
     # enumerate(sr.Microphone.list_microphone_names()).find
 
     r = sr.Recognizer()
-    with sr.Microphone(device_index=environ.get("ALSA_INDEX")) as source:
+    with sr.Microphone(device_index=int(environ.get("ALSA_INDEX"))) as source:
         
         if(threshold == 0):
             print("[CALIBRATING MICROPHONE...]")
