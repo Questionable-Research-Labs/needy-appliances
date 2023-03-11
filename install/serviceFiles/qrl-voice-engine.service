@@ -1,0 +1,10 @@
+[Unit]
+Description=Run face detection service
+After=mosquitto.service
+
+[Service]
+ExecStart=${PROJECT_ROOT}/voice-engine/run.sh
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

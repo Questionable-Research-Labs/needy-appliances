@@ -1,0 +1,10 @@
+[Unit]
+Description=Adapt the MQTT broker to websockets
+After=mosquitto.service
+
+[Service]
+ExecStart=/usr/bin/socket-server
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
