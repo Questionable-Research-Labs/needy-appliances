@@ -3,16 +3,22 @@ name = "socket-server"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+# Actix dependencies
 actix = "0.13.0"
 actix-web = "4.3.1"
 actix-web-actors = "4.2.0"
+
+# Logging
 env_logger = "0.10.0"
-mqtt-async-client = "0.3.1"
+
+# JSON serialization
 serde = { version = "1", features = ["derive"] }
 serde_json = "1.0.94"
+
+# Async + MQTT 
 tokio = { version = "1", features = ["full"] }
+mqtt-async-client = "0.3.1"
+
+# Embedding files
 rust-embed = { version = "6.4.2", features = ["debug-embed"] }
-thiserror = "1"

@@ -17,7 +17,7 @@ interface FaceHashMessage {
 }
 
 export const enum TranscriptRole {
-    HUMAN = "HUMAN",
+    HUMAN = "Human",
     AI = "AI",
 }
 
