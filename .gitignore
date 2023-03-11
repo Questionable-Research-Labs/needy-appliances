@@ -1,6 +1,8 @@
 **/node_modules
 **/target
+**/__pycache__
+Cargo.lock
 
 Cargo.lock
 
-/voice-engine/.env
+**/.env
