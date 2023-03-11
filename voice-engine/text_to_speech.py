@@ -2,11 +2,25 @@
 # This file runs the text to speech engine
 # plug: https://github.com/invalidse
 
-from TTS.api import TTS
+import pyttsx3
 import os
 
-print(TTS.list_models())
-# model_name = TTS.list_models()[0]
-# tts = TTS(model_name)
-# wav = tts.tts("This is a test! This is also a test!!", speaker=tts.speakers[0], language=tts.languages[0])
+# Setup the engine
+engine = pyttsx3.init()
+voices = engine.getProperty('voices')
+for voice in voices:
+    print(voice.id)
 
+engine.setProperty('voice', 'C:/Users/taine/Downloads/en-US')
+engine.setProperty('rate', 175)
+
+def process(script):
+    engine.say(script[-1]["content"])
+    engine.runAndWait()
+
+if __name__ == "__main__":
+    script = []
+    while True:
+        userinput = input("User: ")
+        script.append({"role": "user", "content": userinput})
+        process(script)
