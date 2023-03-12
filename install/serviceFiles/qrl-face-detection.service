@@ -4,6 +4,7 @@ After=mosquitto.service
 
 [Service]
 ExecStart=${PROJECT_ROOT}/face-detection/run.sh
+WorkingDirectory=${PROJECT_ROOT}/face-detection
 Type=simple
 
 [Install]
