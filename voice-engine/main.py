@@ -50,16 +50,17 @@ def main():
             if("--stop" in response.choices[0].message.content):
                 # remove the --stop from the message
                 stop = True
-                response.choices[0].message.content = response.choices[0].message.content.replace("--stop", "")
-                break
+                # response.choices[0].message.content = response.choices[0].message.content.replace("--stop", "")
+
 
             if("--start" in response.choices[0].message.content):
                 # remove the --start from the message
                 start = True
-                response.choices[0].message.content = response.choices[0].message.content.replace("--start", "")
+                # response.choices[0].message.content = response.choices[0].message.content.replace("--start", "")
 
         
             scripts[current_user].append({"role": "assistant", "content": response.choices[0].message.content})
+            process_mqtt.process(scripts[current_user])
 
             text_to_speech.process(scripts[current_user])
             if(start):
@@ -68,7 +69,7 @@ def main():
                 process_mqtt.toggle_appliance(False)
 
 
-            process_mqtt.process(scripts[current_user])
+            
 
         elif human and roast_mode:
             # roast mode
