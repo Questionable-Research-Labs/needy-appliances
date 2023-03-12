@@ -1,6 +1,6 @@
 #!/bin/bash
 # Install dependinces
-sudo apt install python3.9 python3.9-dev python3-pip cmake libasound2-dev
+sudo apt install python3.9 python3.9-dev python3-pip cmake libasound2-dev espeak flac
 sudo python3 -m pip install -r $PROJECT_ROOT/voice-engine/requirements.txt
 
 # Install systemd service
