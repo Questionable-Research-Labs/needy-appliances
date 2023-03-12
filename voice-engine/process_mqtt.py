@@ -10,7 +10,7 @@ import threading
 user_hash = "example"
 # subscribe to FACE_HASH
 
-broker_address = "192.168.137.1"
+broker_address = "127.0.0.1"
 client = mqtt.Client("P1")
 
 def on_message(client, userdata, message):
