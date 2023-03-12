@@ -12,17 +12,17 @@ device_index = 0
 def listen():
     global threshold
 
-    for index, name in enumerate(sr.Microphone.list_microphone_names()):
-        print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
+    # for index, name in enumerate(sr.Microphone.list_microphone_names()):
+    #     print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
 
 
-    if environ.get("ALSA_INDEX") and environ.get("ALSA_INDEX").isnumeric():
-        device_index = int(environ.get("ALSA_INDEX"))
+    # if environ.get("ALSA_INDEX") and environ.get("ALSA_INDEX").isnumeric():
+    #     device_index = int(environ.get("ALSA_INDEX"))
 
-    print(device_index)
+    # print(device_index)
 
     r = sr.Recognizer()
-    with sr.Microphone(device_index=device_index) as source:
+    with sr.Microphone() as source: #device_index=device_index
         
         if(threshold == 0):
             print("[CALIBRATING MICROPHONE...]")

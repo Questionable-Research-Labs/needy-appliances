@@ -1,0 +1,8 @@
+# OpenAI API Key
+OPENAI_API_KEY=
+
+# Appliance mode
+# microwave-0 -> talk to the microwave
+# toaster-0 -> talk to the toaster
+# toaster-1 -> roast the toaster to work
+MODE=
