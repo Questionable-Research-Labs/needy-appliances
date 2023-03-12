@@ -47,13 +47,13 @@ def main():
             response = process_ai.process(scripts[current_user])
             print("[MICROWAVE] {}".format(response.choices[0].message.content))
 
-            if(response.choices[0].message.content.endswith("--stop")):
+            if("--stop" in response.choices[0].message.content):
                 # remove the --stop from the message
                 stop = True
                 response.choices[0].message.content = response.choices[0].message.content.replace("--stop", "")
                 break
 
-            if(response.choices[0].message.content.endswith("--start")):
+            if("--start" in response.choices[0].message.content):
                 # remove the --start from the message
                 start = True
                 response.choices[0].message.content = response.choices[0].message.content.replace("--start", "")
