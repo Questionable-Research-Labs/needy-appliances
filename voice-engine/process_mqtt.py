@@ -5,14 +5,35 @@
 import paho.mqtt.client as mqtt
 import os
 import json
+import threading
+
+user_hash = "example"
+# subscribe to FACE_HASH
 
 broker_address = "192.168.137.1"
 client = mqtt.Client("P1")
 
+def on_message(client, userdata, message):
+    print("[MQTT] Message received: "+ str(message.payload.decode("utf-8")))
+    if(message.topic == "FACE_HASH"):
+        print("[MQTT] Face hash receive: ", message.payload.decode("utf-8"))
+        global user_hash
+        user_hash = json.loads(message.payload.decode("utf-8"))['id'][0]
+        print("USER CHANGE:", str(user_hash))
+
+
+
 try:
     client.connect(broker_address)
+    client.subscribe("FACE_HASH", 0)
+    client.on_message = on_message
+
+
+    b = threading.Thread(name='background', target=client.loop_forever)
+    b.start()
 except:
     print("MQTT NOT CONNECTED, PLEASE CHECK CONNECTION")
+
 
 def process(script):
     client.publish("TRANS", json.dumps(script[-1]))
