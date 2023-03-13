@@ -6,7 +6,7 @@ import os
 import dotenv
 import openai
 import random
-insults = ["bitch"]
+insults = ["bitch", "crackhead", "dipshit", "bozo"]
            
 # Setup the API key
 dotenv.load_dotenv()
