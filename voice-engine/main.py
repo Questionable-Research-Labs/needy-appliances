@@ -28,11 +28,13 @@ scripts = {
 
 
 def main():
+    # Start off
+    process_mqtt.toggle_appliance("stop")
+
     while True:
 
         human = speech_to_text.listen()
-        start = False
-        stop = False
+        stateChange = ""
 
         current_user = str(process_mqtt.user_hash)
         if(current_user not in scripts.keys()):
@@ -49,13 +51,13 @@ def main():
 
             if("--stop" in response.choices[0].message.content):
                 # remove the --stop from the message
-                stop = True
+                stateChange = "stop"
                 # response.choices[0].message.content = response.choices[0].message.content.replace("--stop", "")
 
 
             if("--start" in response.choices[0].message.content):
                 # remove the --start from the message
-                start = True
+                stateChange = "start"
                 # response.choices[0].message.content = response.choices[0].message.content.replace("--start", "")
 
         
@@ -63,10 +65,8 @@ def main():
             process_mqtt.process(scripts[current_user])
 
             text_to_speech.process(scripts[current_user])
-            if(start):
-                process_mqtt.toggle_appliance(True)
-            elif(stop):
-                process_mqtt.toggle_appliance(False)
+            if stateChange:
+                process_mqtt.toggle_appliance(stateChange)
 
 
             

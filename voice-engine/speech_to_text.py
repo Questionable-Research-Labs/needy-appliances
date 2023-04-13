@@ -2,6 +2,7 @@
 # This file runs the speech to text engine (Google for now)
 # plug: https://github.com/invalidse
 
+import os
 import speech_recognition as sr
 from os import environ
 
@@ -10,19 +11,20 @@ threshold = 0
 device_index = 0
 
 def listen():
-    global threshold
+    global threshold,device_index
 
-    # for index, name in enumerate(sr.Microphone.list_microphone_names()):
-    #     print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
+    if environ.get("MICROPHONE_DEVICE_ID") and environ.get("MICROPHONE_DEVICE_ID").isnumeric():
+        device_index = int(environ.get("MICROPHONE_DEVICE_ID"))
 
-
-    # if environ.get("ALSA_INDEX") and environ.get("ALSA_INDEX").isnumeric():
-    #     device_index = int(environ.get("ALSA_INDEX"))
+    for index, name in enumerate(sr.Microphone.list_microphone_names()):
+        print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
+        if index == device_index:
+            print("^ THE CHOSEN ONE^")
 
     # print(device_index)
 
     r = sr.Recognizer()
-    with sr.Microphone() as source: #device_index=device_index
+    with sr.Microphone(device_index=device_index) as source: #device_index=device_index
         
         if(threshold == 0):
             print("[CALIBRATING MICROPHONE...]")
@@ -31,7 +33,7 @@ def listen():
             threshold = r.energy_threshold
 
         # stop listening quickly if the user stops talking
-        r.pause_threshold = 0.4
+        r.pause_threshold = 0.6
         r.non_speaking_duration = 0.4
 
 
@@ -43,7 +45,7 @@ def listen():
         audio = r.listen(source, timeout=15, phrase_time_limit=5)
         try:
             print("[RECOGNIZING...]")
-            text = r.recognize_google(audio)
+            text = r.recognize_whisper_api(audio, model="whisper-1", api_key=os.getenv("OPENAI_API_KEY"))
             print("[USER] {}".format(text))
             return text
         except:

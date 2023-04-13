@@ -40,10 +40,12 @@ def process(script):
     print("[MQTT] Published: "+ str(json.dumps(script[-1])))
 
 def toggle_appliance(value):
-    if(value):
+    if value=="start":
         client.publish("ACTION", bytearray([1]))
-    else:
+    elif value=="stop":
         client.publish("ACTION", bytearray([0]))
+    else:
+        print("ERROR: Invalid State change requested", value)
 
     print("[MQTT] Published: "+ str(value))
 

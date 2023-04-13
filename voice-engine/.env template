@@ -6,3 +6,16 @@ OPENAI_API_KEY=
 # toaster-0 -> talk to the toaster
 # toaster-1 -> roast the toaster to work
 MODE=
+
+# OpenAI GPT Model to use, either gpt-3.5 or gpt-4
+AI_MODEL=gpt-3.5-turbo-0301
+
+
+# Microphone index override
+MICROPHONE_DEVICE_ID=
+
+# Elevenlabs API Key used for text->speach, defaults to Espeak
+ELEVENLABS_API_KEY=
+
+# Elvenlabs Voice ID
+ELEVENLabs_VOICE_ID=21m00Tcm4TlvDq8ikWAM
