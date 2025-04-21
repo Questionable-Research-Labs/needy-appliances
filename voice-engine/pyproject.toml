@@ -9,6 +9,8 @@ dependencies = [
     "paho-mqtt==1.6.1",
     "playsound==1.2.2",
     "pyaudio>=0.2.14",
+    "pycairo>=1.28.0",
+    "pygobject>=3.52.3",
     "python-dotenv>=1.1.0",
     "pyttsx3>=2.98",
     "requests>=2.32.3",

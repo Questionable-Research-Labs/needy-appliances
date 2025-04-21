@@ -1,3 +1,3 @@
 #!/bin/bash
 sleep 5
-python3 main.py
+uv run main.py
