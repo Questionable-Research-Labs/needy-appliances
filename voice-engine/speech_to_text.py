@@ -16,13 +16,18 @@ def listen():
     if environ.get("MICROPHONE_DEVICE_ID") and environ.get("MICROPHONE_DEVICE_ID").isnumeric():
         device_index = int(environ.get("MICROPHONE_DEVICE_ID"))
 
-    for index, name in enumerate(sr.Microphone.list_microphone_names()):
+    device_list = enumerate(sr.Microphone.list_microphone_names())
+
+    print("\n\n[MICROPHONE LIST]")
+    print("--------------------------------------------------")
+    for index, name in device_list:
         print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
         if index == device_index:
             print("^ THE CHOSEN ONE^")
 
-    # print(device_index)
+    print("--------------------------------------------------\n\n")
 
+    # print(device_index)
     r = sr.Recognizer()
     with sr.Microphone(device_index=device_index) as source: #device_index=device_index
         
@@ -45,11 +50,12 @@ def listen():
         audio = r.listen(source, timeout=15, phrase_time_limit=5)
         try:
             print("[RECOGNIZING...]")
-            text = r.recognize_whisper_api(audio, model="whisper-1", api_key=os.getenv("OPENAI_API_KEY"))
+            text = r.recognize_openai(audio)
             print("[USER] {}".format(text))
             return text
-        except:
+        except Exception as e:
             print("[USER] ...")
+            print("[ERROR] {}".format(e))
             return False
         
 if __name__ == "__main__":

@@ -4,25 +4,26 @@
 
 import os
 import dotenv
-import openai
-import random
-           
+
 # Setup the API key
 dotenv.load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+import random
+
 
 AI_MODEL = os.getenv("AI_MODEL")
 
 def process(script):
-    response = openai.ChatCompletion.create(
-        model=AI_MODEL,
-        messages=script,
-        max_tokens=64,
-        temperature=0.8,
-        top_p=1,
-        frequency_penalty=0.1,
-        presence_penalty=0.2
-    )
+    response = client.chat.completions.create(model=AI_MODEL,
+    messages=script,
+    max_tokens=64,
+    temperature=0.8,
+    top_p=1,
+    frequency_penalty=0.1,
+    presence_penalty=0.2)
     return response
 
 def rate_roast(message):
@@ -34,15 +35,13 @@ def rate_roast(message):
                {"role": "user", "content": message}
                ])
 
-    response = openai.ChatCompletion.create(
-        model=AI_MODEL,
-        messages=prompt,
-        max_tokens=5,
-        temperature=0.8,
-        top_p=1,
-        frequency_penalty=0.1,
-        presence_penalty=0.2
-    )
+    response = client.chat.completions.create(model=AI_MODEL,
+    messages=prompt,
+    max_tokens=5,
+    temperature=0.8,
+    top_p=1,
+    frequency_penalty=0.1,
+    presence_penalty=0.2)
 
 
     print("[RATING]", response.choices[0].message.content)
@@ -51,7 +50,7 @@ def rate_roast(message):
     # get the rating
     if "true" in normalisedResponse:
         return "start"
-    
+
     # default to stop
     return "stop"
 

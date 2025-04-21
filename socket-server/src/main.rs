@@ -26,7 +26,7 @@ async fn main() -> std::io::Result<()> {
             .configure(socket::configure)
             .configure(public::configure)
     })
-    .bind((Ipv4Addr::UNSPECIFIED, 80))?
+    .bind((Ipv4Addr::UNSPECIFIED, 8080))?
     .run()
     .await
 }
